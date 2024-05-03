@@ -8,6 +8,14 @@ public class Player {
         this.goalsScored = goalsScored;
         this.goalsConceded = goalsConceded;
     }
+    public void setGoalsScored(int goalsScored) {
+        this.goalsScored = goalsScored;
+    }
+
+    public void setGoalsConceded(int goalsConceded) {
+        this.goalsConceded = goalsConceded;
+    }
+
 
     public String getPlayerName() {
         return playerName;

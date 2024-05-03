@@ -15,7 +15,7 @@ public class MyFrame extends JFrame {
     private JTextArea ta;
     private Container c;
     private JTextField searchField;
-    private JButton btn1, btn2, btn3, searchButton;
+    private JButton btn1, btn2, btn3, btn4,searchButton;
     private Font f;
     private ImageIcon img;
     private JLabel l1;
@@ -73,6 +73,22 @@ public class MyFrame extends JFrame {
         btn3 = new JButton("Clear");
         btn3.setBounds(370, 130, 150, 50);
         c.add(btn3);
+
+
+
+        btn4 = new JButton("Edit Player");
+        btn4.setBounds(260, 100, 100, 30);
+        btn4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String playerName = JOptionPane.showInputDialog("Enter player name to edit:");
+                if (playerName != null && !playerName.trim().isEmpty()) {
+                    openEditPlayerFrame(playerName.trim());
+                }
+            }
+        });
+        c.add(btn4);
+
 
         searchButton = new JButton("Search");
         searchButton.setBounds(260, 160, 100, 30);
@@ -150,7 +166,46 @@ public class MyFrame extends JFrame {
 
         }
 
-        // Method to open frame for adding a new player to a team
+    private void openEditPlayerFrame(String playerName) {
+        for (Team team : teams) {
+            for (Player player : team.getPlayers()) {
+                if (player.getPlayerName().equalsIgnoreCase(playerName)) {
+                    JFrame editPlayerFrame = new JFrame("Edit Player");
+                    editPlayerFrame.setLayout(new GridLayout(0, 2, 5, 5));
+                    editPlayerFrame.setSize(300, 200);
+                    editPlayerFrame.setLocationRelativeTo(null);
+
+                    JTextField goalsScoredField = new JTextField(String.valueOf(player.getGoalsScored()));
+                    JTextField goalsConcededField = new JTextField(String.valueOf(player.getGoalConceded()));
+
+                    editPlayerFrame.add(new JLabel("Goals Scored:"));
+                    editPlayerFrame.add(goalsScoredField);
+                    editPlayerFrame.add(new JLabel("Goals Conceded:"));
+                    editPlayerFrame.add(goalsConcededField);
+
+                    JButton saveButton = new JButton("Save Changes");
+                    saveButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            int goalsScored = Integer.parseInt(goalsScoredField.getText());
+                            int goalsConceded = Integer.parseInt(goalsConcededField.getText());
+                            player.setGoalsScored(goalsScored);
+                            player.setGoalsConceded(goalsConceded);
+                            editPlayerFrame.dispose();
+                        }
+                    });
+
+                    editPlayerFrame.add(saveButton);
+                    editPlayerFrame.setVisible(true);
+                    return;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Player not found!");
+    }
+
+
+    // Method to open frame for adding a new player to a team
         private void openAddPlayerFrame (JFrame parentFrame, String teamName){
             JFrame addPlayerFrame = new JFrame("Add Player");
             addPlayerFrame.setBounds(800,300,300,300);
@@ -176,6 +231,9 @@ public class MyFrame extends JFrame {
                     addPlayerFrame.dispose();
                 }
             });
+
+
+
 
 
             addPlayerFrame.add(new JLabel("Player Name:"));
